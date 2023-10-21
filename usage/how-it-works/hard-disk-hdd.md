@@ -1,0 +1,68 @@
+---
+description: Hard drives, Solid state drives, NVMe, etc.
+---
+
+# 🗃 Hard Disk (HDD)
+
+SpecProbe can probe HDD information by calling the `HardwareProber.HardDisk` property. This populates the following values in accordance to the available information:
+
+| Value            | Notes |
+| ---------------- | ----- |
+| `HardDiskSize`   |       |
+| `PartitionCount` |       |
+| `Partitions`     |       |
+
+Each partition in the `Partitions` list contains the following properties:
+
+| Value             | Notes |
+| ----------------- | ----- |
+| `PartitionNumber` |       |
+| `PartitionSize`   |       |
+
+## How parsing works
+
+This section describes how parsing works for the below systems:
+
+### Linux
+
+SpecProbe on Linux systems tries to get all the block devices defined in the `/sys/block` folder. Once the list of block devices are populated (loop devices are not supported), it first checks the contents of the `removable` file.
+
+If the `removable` state is zero, which means that it's a fixed drive, SpecProbe attempts to get the total size of the drive by probing the block size of each drive from the `size` file for each drive. Then, it translates that size to the actual size in bytes by multiplying it by `512`.
+
+For the partitions, SpecProbe gets the device name and attempts to check the block device name to see if it ends with a number (`nvme0n1` for NVMe drives, `mmbclk0` for eMMC drives, ...). After that, it assigns the drive number as appropriate.
+
+For partitions, SpecProbe attempts to formulate the correct partition block device name in accordance to the drive number existence (`nvme0n1` vs. `sda`) so that it can check to see if that partition exists.
+
+Then, SpecProbe tries to get the size of a single partition by parsing the contents of the `size` file from the partition path and multiplying the block size reported by that file by `512` to get the total number of bytes.
+
+{% hint style="info" %}
+To get this information on Android phones and tablets, your device needs to be rooted and SpecProbe needs to be updated to version 1.1.0. Unrooted Android devices only show little to no information.
+{% endhint %}
+
+### Windows
+
+For Windows systems, it tries to get the list of all the recognized logical Windows drives using the `GetDrives()` function, excluding the unmounted partitions, such as your system reserved partition. Once the drive is ready, SpecProbe formulates the Windows kernel partition path for the next step.
+
+After that, it calls the [`CreateFile()`](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea) Windows API function to the formulated partition path to add the resulting drive handle to the list of handles.
+
+Then, SpecProbe attempts to access the [`DeviceIoControl()`](https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-deviceiocontrol) function for two things:
+
+* Drive geometry to get access to the Cylinder, Heads, and Sectors (CHS) info
+* Device number that gets assigned by the Windows operating system
+
+Then, the hard disk size is calculated by multiplying the four values:
+
+* Cylinders
+* Tracks per cylinder (heads)
+* Sectors per track (or per head)
+* Bytes per sector
+
+{% hint style="info" %}
+Because of the usage of `CreateFile()` and the `DeviceIoControl()` Windows API functions on your drives, you need to run every application that uses SpecProbe to probe your hard drives as an elevated administrator. The console app shipped with SpecProbe sets the requirement of the administrator privileges.
+
+To do this in your application, create an `app.manifest` file and add this inside the `requestedPrivileges` list:
+
+```xml
+<requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
+```
+{% endhint %}
