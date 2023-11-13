@@ -66,3 +66,11 @@ To do this in your application, create an `app.manifest` file and add this insid
 <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
 ```
 {% endhint %}
+
+### macOS
+
+SpecProbe on macOS systems tries to get all the block devices defined in the `/dev` folder that their names start with `disk`. `diskutil` then gets executed with the full path to the block device, such as `/dev/disk0` for the first disk and `/dev/disk0s1` for the first partition.
+
+If the `Removable Media` state is `Fixed`, which means that it's a fixed drive, SpecProbe attempts to get the total size of the drive by getting the total number of bytes from the `Disk Size` for physical disks or the `Volume Used Space` for APFS virtual partitions.
+
+For the partitions, SpecProbe gets the disk ID and the partition number, and checks to see if the disk is one of the known virtual disks. Then, SpecProbe adds the disk or partition to the list.

@@ -8,6 +8,10 @@ Welcome to SpecProbe! It's a reboot of Inxi.NET that probes all hardware informa
 
 To use this library, go to any page in the left side of the screen.
 
+{% hint style="info" %}
+As of 1.1.0, macOS is now officially supported!
+{% endhint %}
+
 ## Installation
 
 This library is very easy to install. It's available at [NuGet](https://www.nuget.org/packages/SpecProbe/). Just follow these steps:

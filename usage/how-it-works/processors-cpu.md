@@ -14,8 +14,9 @@ SpecProbe can probe CPU information by calling the `HardwareProber.Processors` p
 | `L1CacheSize`      | Unavailable on ARM systems                  |
 | `L2CacheSize`      | Unavailable on ARM systems                  |
 | `L3CacheSize`      | Unavailable on ARM systems                  |
+|                    | Unavailable on macOS                        |
 | `Name`             |                                             |
-| `CpuidVendor`      | Can sometimes by empty on some systems.     |
+| `CpuidVendor`      | Can sometimes be empty on some systems.     |
 |                    | Unavailable on ARM systems                  |
 | `Vendor`           | Usually ARM or ARM Processor on ARM systems |
 | `Speed`            | Unavailable on ARM systems                  |
@@ -64,3 +65,19 @@ Finally, for clock speed, it queries the `CallNtPowerInformation()` function res
 {% hint style="info" %}
 Note that you can't get processor name if you're running Windows ARM, because there is no acceptable way to get the processor name and vendor without either slowing down (WMI) or being forged (registry).
 {% endhint %}
+
+### macOS
+
+The name is obtained using the helper library, SpecProber, and optionally falls back to the `sysctl` method if it failed to get the name.
+
+SpecProbe executes the `sysctl` command with the following arguments:
+
+* `machdep.cpu.core_count`: CPU core count
+* `machdep.cpu.cores_per_package`: CPU cores per processor package
+* `hw.cpufrequency`: The frequency of the CPU in hertz (Hz)
+* `machdep.cpu.vendor`: The processor vendor (GenuineIntel, AuthenticAMD, etc.)
+* `machdep.cpu.brand_string`: The processor brand string
+* `hw.l1icachesize`: L1 cache size in bytes
+* `hw.l2cachesize`: L2 cache size in bytes
+
+Then, SpecProbe probes these values and processes them as appropriate.

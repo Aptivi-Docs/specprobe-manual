@@ -35,3 +35,21 @@ For Windows systems, it calls the native Windows API function [`EnumDisplayDevic
 {% hint style="info" %}
 This may return duplicate entries for systems with multiple monitors (connected or not).
 {% endhint %}
+
+### macOS
+
+For macOS systems, it first checks to see if your application is set to run in a hardened macOS runtime.
+
+{% hint style="info" %}
+You can tell SpecProbe that your application is hardened by calling the `SetNotarized()` function.
+{% endhint %}
+
+#### Hardened
+
+If SpecProbe is told that your application is hardened, SpecProbe uses the CoreGraphics Quartz API to fetch the display information and get the model and the vendor numbers.
+
+#### Not Hardened
+
+If SpecProbe is told that your application is not hardened, SpecProbe uses the `system_profile` application to get information about the display. It gets the `Device ID` and the `Vendor ID`.
+
+Finally, SpecProbe merges these two IDs to create a single video card name.

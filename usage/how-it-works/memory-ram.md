@@ -35,3 +35,12 @@ To get this information on Android phones and tablets, your device needs to be r
 ### Windows
 
 For Windows systems, it calls the native Windows API function [`GlobalMemoryStatusEx()`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex) to get the total usable installed memory. Then, it calls the [`GetPhysicallyInstalledSystemMemory()`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getphysicallyinstalledsystemmemory) function to get the physically installed system memory in kilobytes. SpecProbe then converts the value to bytes by multiplying it by `1024`.
+
+### macOS
+
+For Macintosh systems, it executes `sysctl` with the following arguments:
+
+* `hw.memsize_usable`: Usable memory size in bytes
+* `hw.memsize`: Total memory size in bytes
+
+Then, SpecProbe processes their values as appropriate.
