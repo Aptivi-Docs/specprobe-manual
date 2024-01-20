@@ -41,7 +41,7 @@ To get this information on Android phones and tablets, your device needs to be r
 
 ### Windows
 
-For Windows systems, it tries to get the list of all the recognized logical Windows drives using the `GetDrives()` function, excluding the unmounted partitions, such as your system reserved partition. Once the drive is ready, SpecProbe formulates the Windows kernel partition path for the next step.
+For Windows systems, it tries to get the list of all the recognized physical Windows drives, including the unmounted partitions, such as your system reserved partition. Once the drive is ready, SpecProbe formulates the Windows kernel partition path for the next step.
 
 After that, it calls the [`CreateFile()`](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea) Windows API function to the formulated partition path to add the resulting drive handle to the list of handles.
 

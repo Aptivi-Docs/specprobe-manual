@@ -4,6 +4,10 @@ description: How do you use this library?
 
 # 🖥 How to use
 
+{% hint style="info" %}
+You can now use this library in .NET Framework 4.8 applications!
+{% endhint %}
+
 This library is simple to use compared to Inxi.NET. You can selectively parse hardware and get information for each part that is currently supported by SpecProbe below:
 
 <table><thead><tr><th width="267">Type</th><th>Property</th></tr></thead><tbody><tr><td>Processor (CPU)</td><td><code>HardwareProber.Processors</code></td></tr><tr><td>Graphics Card (GPU)</td><td><code>HardwareProber.Video</code></td></tr><tr><td>System Memory (RAM)</td><td><code>HardwareProber.Memory</code></td></tr><tr><td>Storage Devices (HDD, SSD, NVMe, eMMC, ...)</td><td><code>HardwareProber.HardDisk</code></td></tr></tbody></table>

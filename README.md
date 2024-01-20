@@ -20,6 +20,9 @@ This library is very easy to install. It's available at [NuGet](https://www.nuge
 2. Place the `PackageReference` line on a property group like so:
    * `<PackageReference Include="SpecProbe" Version="x.x.x" />`
    * ...where `Version` is the current version of the library
-3. Run a package restore using `dotnet restore`
+3. Optionally, you can include the Software part of the library:
+   * `<PackageReference Include="SpecProbe.Software" Version="x.x.x" />`
+   * ...where `Version` is the current version of the library
+4. Run a package restore using `dotnet restore`
 
 If you follow these steps correctly, you should be able to use the SpecProbe functions.
