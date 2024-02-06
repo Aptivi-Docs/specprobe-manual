@@ -43,3 +43,30 @@ For individual parts, check their individual pages in the page below:
 {% content-ref url="how-it-works/" %}
 [how-it-works](how-it-works/)
 {% endcontent-ref %}
+
+## Software
+
+In addition to the hardware parser that SpecProbe provides, this library also provides a separate NuGet package that allows you to get software information, including your kernel version.
+
+### Kernel version
+
+Just use the `UnameManager` class that contains:
+
+* `GetUname(UnameTypes)`
+
+This function queries information about your kernel and its basic information, like your system architecture and your kernel version, based on the passed `uname` flags. Currently, it supports all the portable flags in `UnameTypes`:︎
+
+* Kernel name (`UnameTypes.KernelName`)
+* Kernel release (`UnameTypes.KernelRelease`)
+* Kernel version (`UnameTypes.KernelVersion`)
+* Network host name (`UnameTypes.NetworkNode`)
+* Machine architecture (`UnameTypes.Machine`)
+* Operating system (`UnameTypes.OperatingSystem`)
+
+### Platform
+
+You can also query the platform of your choice using functions defined in the `PlatformHelper` class. It allows you to check to see if the host is running Windows or Linux, and more. It also allows you to get the terminal emulator and the type.
+
+You can also use the RID graph reader by using `GetGraphFromRid()` found in the `RidGraphReader` class to get all the RIDs that can be used to resolve them to basically the base RID.
+
+You can refer to the `ridgraph.json` file found in the source code for the whole RID map.
