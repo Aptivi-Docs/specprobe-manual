@@ -1,6 +1,7 @@
 # Table of contents
 
 * [👋 Welcome!](README.md)
+* [🗞️ Breaking changes](breaking-changes.md)
 
 ## Usage
 
