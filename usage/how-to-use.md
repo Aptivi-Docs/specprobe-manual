@@ -2,11 +2,7 @@
 description: How do you use this library?
 ---
 
-# 🖥 How to use
-
-{% hint style="info" %}
-You can now use this library in .NET Framework 4.8 applications!
-{% endhint %}
+# 🖥️ How to use
 
 This library is simple to use compared to Inxi.NET. You can selectively parse hardware and get information for each part that is currently supported by SpecProbe below:
 
@@ -70,3 +66,66 @@ You can also query the platform of your choice using functions defined in the `P
 You can also use the RID graph reader by using `GetGraphFromRid()` found in the `RidGraphReader` class to get all the RIDs that can be used to resolve them to basically the base RID.
 
 You can refer to the `ridgraph.json` file found in the source code for the whole RID map.
+
+## Native Libraries
+
+{% hint style="info" %}
+This section is put here to prepare for the merger of NativeLand and SpecProbe in the v2.x.x version series of SpecProbe.
+{% endhint %}
+
+`SpecProbe.Loader` contains a class that manages how to load the libraries according to both the operating system and the architecture specification using different paths, called `LibraryManager`. This allows you to load native libraries by copying the native library file or stream to a file in the application executable directory.
+
+You just need to get a path to a native library file or extract a resource found inside your application using one of the available methods, such as [`Assembly.GetManifestResourceStream()`](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.getmanifestresourcestream?view=net-8.0) + [`Stream.CopyTo()`](https://learn.microsoft.com/en-us/dotnet/api/system.io.stream.copyto?view=net-8.0) for embedded resource streams or [`File.ReadAllBytes()`](https://learn.microsoft.com/en-us/dotnet/api/system.io.file.readallbytes?view=net-8.0) for file streams, to a file using a file path that you've specified. This is an example of how to create a new instance of the library manager from a byte stream:
+
+```csharp
+// Make a temp directory
+string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+Directory.CreateDirectory(tempDir);
+
+// Copy libraries
+var accessor = new ResourceAccessor(Assembly.GetExecutingAssembly());
+if (PlatformHelper.IsOnWindows())
+    File.WriteAllBytes(tempDir + @"\TestLib.dll", accessor.Binary("TestLib.dll"));
+else if (PlatformHelper.IsOnMacOS())
+    File.WriteAllBytes(tempDir + @"/libTestLib.dylib", accessor.Binary("libTestLib.dylib"));
+else if (PlatformHelper.IsOnUnix())
+{
+    if (PlatformHelper.IsOnArm64())
+        File.WriteAllBytes(tempDir + @"/libTestLib_Arm64.so", accessor.Binary("libTestLib_Arm64.so"));
+    else
+        File.WriteAllBytes(tempDir + @"/libTestLib.so", accessor.Binary("libTestLib.so"));
+}
+
+// Now, create a library manager
+var libManager = new LibraryManager(
+    new LibraryItem(Platform.Windows, Architecture.X64,
+        new LibraryFile(tempDir + @"\TestLib.dll")),
+    new LibraryItem(Platform.MacOS, Architecture.X64,
+        new LibraryFile(tempDir + @"/libTestLib.dylib")),
+    new LibraryItem(Platform.Linux, Architecture.X64,
+        new LibraryFile(tempDir + @"/libTestLib.so")),
+    new LibraryItem(Platform.Linux, Architecture.Arm64,
+        new LibraryFile(tempDir + @"/libTestLib_Arm64.so")));
+
+// Load the library
+libManager.LoadNativeLibrary();
+```
+
+Once you're done creating new instances of library manager classes, you can now load all of them when needed, as in `LoadNativeLibrary()`. To verify that it's truly loaded, use the `GetNativeMethodDelegate<T>()` method, pointing the generic type argument to your function delegate that matches the native library signatures. This is an example of how to call a native library function:
+
+```csharp
+private delegate int Hello();
+
+private static int SayHello()
+{
+    // Load native library like the code above
+    [...]
+    
+    // Get the hello result from the delegate
+    var @delegate = libManager.GetNativeMethodDelegate<Hello>("hello");
+    int result = @delegate.Invoke();
+    
+    // Print the result
+    Console.WriteLine(result);
+}
+```

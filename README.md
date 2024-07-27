@@ -4,13 +4,9 @@ description: Welcome to SpecProbe!
 
 # 👋 Welcome!
 
-Welcome to SpecProbe! It's a reboot of Inxi.NET that probes all hardware information from your computer, such as your graphics card, your CPU, and your hard drives.
+Welcome to SpecProbe! It's not only a reboot of Inxi.NET that probes all hardware information from your computer, such as your graphics card, your CPU, and your hard drives, but also provides you with some platform-specific tools that are useful, such as loading native libraries.
 
 To use this library, go to any page in the left side of the screen.
-
-{% hint style="info" %}
-As of 1.1.0, macOS is now officially supported!
-{% endhint %}
 
 ## Installation
 
