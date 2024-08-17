@@ -10,6 +10,10 @@ To use this library, go to any page in the left side of the screen.
 
 ## Installation
 
+{% hint style="warning" %}
+Starting from SpecProbe 2.0.1, we no longer support 32-bit architectures. In case you need to support 32-bit platforms, you can still use 2.0.0, but you'll miss out in both improvements and in additions. We recommend you to ditch 32-bit support as soon as you can.
+{% endhint %}
+
 This library is very easy to install. It's available at [NuGet](https://www.nuget.org/packages/SpecProbe/). Just follow these steps:
 
 1. Open your project file (`.csproj` or `.fsproj`)
