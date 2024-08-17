@@ -6,7 +6,7 @@ description: How do you use this library?
 
 This library is simple to use compared to Inxi.NET. You can selectively parse hardware and get information for each part that is currently supported by SpecProbe below:
 
-<table><thead><tr><th width="267">Type</th><th>Property</th></tr></thead><tbody><tr><td>Processor (CPU)</td><td><code>HardwareProber.Processors</code></td></tr><tr><td>Graphics Card (GPU)</td><td><code>HardwareProber.Video</code></td></tr><tr><td>System Memory (RAM)</td><td><code>HardwareProber.Memory</code></td></tr><tr><td>Storage Devices (HDD, SSD, NVMe, eMMC, ...)</td><td><code>HardwareProber.HardDisk</code></td></tr></tbody></table>
+<table><thead><tr><th width="267">Type</th><th>Property</th></tr></thead><tbody><tr><td>Processor (CPU)</td><td><code>HardwareProber.GetProcessor</code></td></tr><tr><td>Graphics Card (GPU)</td><td><code>HardwareProber.GetVideos</code></td></tr><tr><td>System Memory (RAM)</td><td><code>HardwareProber.GetMemory</code></td></tr><tr><td>Storage Devices (HDD, SSD, NVMe, eMMC, ...)</td><td><code>HardwareProber.GetHardDisks</code></td></tr></tbody></table>
 
 Once you call these properties, the parser relevant to the part that you need to get information will try to fetch info from the hardware in native ways.
 
@@ -61,11 +61,9 @@ This function queries information about your kernel and its basic information, l
 
 ### Platform
 
-You can also query the platform of your choice using functions defined in the `PlatformHelper` class. It allows you to check to see if the host is running Windows or Linux, and more. It also allows you to get the terminal emulator and the type.
+You can also query the platform of your choice using functions defined in the `PlatformHelper` class. It allows you to check to see if the host is running Windows or Linux, and more. It also allows you to get the terminal emulator and the type. You can detect .NET Framework, too!
 
 You can also use the RID graph reader by using `GetGraphFromRid()` found in the `RidGraphReader` class to get all the RIDs that can be used to resolve them to basically the base RID.
-
-You can refer to the `ridgraph.json` file found in the source code for the whole RID map.
 
 ## Native Libraries
 
@@ -75,39 +73,40 @@ This section is put here to prepare for the merger of NativeLand and SpecProbe i
 
 `SpecProbe.Loader` contains a class that manages how to load the libraries according to both the operating system and the architecture specification using different paths, called `LibraryManager`. This allows you to load native libraries by copying the native library file or stream to a file in the application executable directory.
 
-You just need to get a path to a native library file or extract a resource found inside your application using one of the available methods, such as [`Assembly.GetManifestResourceStream()`](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.getmanifestresourcestream?view=net-8.0) + [`Stream.CopyTo()`](https://learn.microsoft.com/en-us/dotnet/api/system.io.stream.copyto?view=net-8.0) for embedded resource streams or [`File.ReadAllBytes()`](https://learn.microsoft.com/en-us/dotnet/api/system.io.file.readallbytes?view=net-8.0) for file streams, to a file using a file path that you've specified. This is an example of how to create a new instance of the library manager from a byte stream:
+You just need to get a path to a native library file using a file path that you've specified. This is an example of how to create a new instance of the library manager from a file path:
 
 ```csharp
-// Make a temp directory
-string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
-Directory.CreateDirectory(tempDir);
-
-// Copy libraries
-var accessor = new ResourceAccessor(Assembly.GetExecutingAssembly());
-if (PlatformHelper.IsOnWindows())
-    File.WriteAllBytes(tempDir + @"\TestLib.dll", accessor.Binary("TestLib.dll"));
-else if (PlatformHelper.IsOnMacOS())
-    File.WriteAllBytes(tempDir + @"/libTestLib.dylib", accessor.Binary("libTestLib.dylib"));
-else if (PlatformHelper.IsOnUnix())
+var platform = PlatformHelper.GetPlatform();
+var bitness = PlatformHelper.GetArchitecture();
+switch (platform)
 {
-    if (PlatformHelper.IsOnArm64())
-        File.WriteAllBytes(tempDir + @"/libTestLib_Arm64.so", accessor.Binary("libTestLib_Arm64.so"));
-    else
-        File.WriteAllBytes(tempDir + @"/libTestLib.so", accessor.Binary("libTestLib.so"));
+    case Platform.Windows:
+        libManager = bitness switch
+        {
+            Architecture.X64 =>
+                new LibraryManager(new LibraryFile(libX64Path)),
+            Architecture.Arm64 =>
+                new LibraryManager(new LibraryFile(libArm64Path)),
+            _ =>
+                throw new PlatformNotSupportedException("32-bit systems are no longer supported."),
+        };
+        break;
+    case Platform.Linux:
+    case Platform.MacOS:
+        switch (bitness)
+        {
+            case Architecture.X64:
+                libManager = new LibraryManager(
+                    new LibraryFile(libX64Path));
+                break;
+            case Architecture.Arm:
+            case Architecture.X86:
+                throw new PlatformNotSupportedException("32-bit systems are no longer supported.");
+        }
+        break;
 }
 
-// Now, create a library manager
-var libManager = new LibraryManager(
-    new LibraryItem(Platform.Windows, Architecture.X64,
-        new LibraryFile(tempDir + @"\TestLib.dll")),
-    new LibraryItem(Platform.MacOS, Architecture.X64,
-        new LibraryFile(tempDir + @"/libTestLib.dylib")),
-    new LibraryItem(Platform.Linux, Architecture.X64,
-        new LibraryFile(tempDir + @"/libTestLib.so")),
-    new LibraryItem(Platform.Linux, Architecture.Arm64,
-        new LibraryFile(tempDir + @"/libTestLib_Arm64.so")));
-
-// Load the library
+// Load the native library
 libManager.LoadNativeLibrary();
 ```
 
@@ -129,3 +128,7 @@ private static int SayHello()
     Console.WriteLine(result);
 }
 ```
+
+## PCI IDs
+
+SpecProbe now manages all the PCI IDs for all known devices that you can find in the PCI ID database that you can download [here](https://pci-ids.ucw.cz/). You can use the `PciListParser` class that lets you get vendors, devices, subdevices, and get their information.
