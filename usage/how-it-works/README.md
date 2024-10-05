@@ -1,8 +1,9 @@
 ---
 description: How does it work?
+icon: wrench
 ---
 
-# ⚒ How it works
+# How it works
 
 SpecProbe works by using native system APIs to get hardware information, because it's aimed at performance. The benchmark results as shown in the previous page shows you performance comparison with Inxi.NET vs. SpecProbe.
 

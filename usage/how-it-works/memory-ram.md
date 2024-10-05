@@ -1,8 +1,9 @@
 ---
 description: Random Access Memory
+icon: memory
 ---
 
-# 💻 Memory (RAM)
+# Memory (RAM)
 
 SpecProbe can probe RAM information by calling the `HardwareProber.Memory` property. This populates the following values in accordance to the available information:
 

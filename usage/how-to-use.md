@@ -1,8 +1,9 @@
 ---
 description: How do you use this library?
+icon: computer
 ---
 
-# 🖥️ How to use
+# How to use
 
 This library is simple to use compared to Inxi.NET. You can selectively parse hardware and get information for each part that is currently supported by SpecProbe below:
 

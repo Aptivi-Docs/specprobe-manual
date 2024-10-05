@@ -1,8 +1,9 @@
 ---
 description: Hard drives, Solid state drives, NVMe, etc.
+icon: hard-drive
 ---
 
-# 🗃️ Hard Disk (HDD)
+# Hard Disk (HDD)
 
 SpecProbe can probe HDD information by calling the `HardwareProber.HardDisk` property. This populates the following values in accordance to the available information:
 

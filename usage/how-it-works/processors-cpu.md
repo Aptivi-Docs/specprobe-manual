@@ -1,8 +1,9 @@
 ---
 description: Central Processing Unit
+icon: microchip
 ---
 
-# 🖥 Processors (CPU)
+# Processors (CPU)
 
 SpecProbe can probe CPU information by calling the `HardwareProber.Processors` property. This populates the following values in accordance to the available information:
 

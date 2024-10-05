@@ -1,8 +1,9 @@
 ---
 description: Graphics Processing Unit
+icon: gamepad-modern
 ---
 
-# 🎮 Graphics Card (GPU)
+# Graphics Card (GPU)
 
 SpecProbe can probe GPU information by calling the `HardwareProber.Video` property. This populates the following values in accordance to the available information:
 

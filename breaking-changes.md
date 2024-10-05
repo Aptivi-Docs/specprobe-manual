@@ -1,8 +1,9 @@
 ---
 description: What broke between versions?
+icon: newspaper
 ---
 
-# 🗞️ Breaking changes
+# Breaking changes
 
 When we're making new versions of this library, there are several breaking changes that we had to make to maintain the library better and to introduce new features and/or improvements. Here are the following breaking changes sorted from the oldest to the latest:
 
