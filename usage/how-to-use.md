@@ -7,9 +7,13 @@ description: How do you use this library?
 
 This library is simple to use compared to Inxi.NET. You can selectively parse hardware and get information for each part that is currently supported by SpecProbe below:
 
-<table><thead><tr><th width="267">Type</th><th>Property</th></tr></thead><tbody><tr><td>Processor (CPU)</td><td><code>HardwareProber.GetProcessor</code></td></tr><tr><td>Graphics Card (GPU)</td><td><code>HardwareProber.GetVideos</code></td></tr><tr><td>System Memory (RAM)</td><td><code>HardwareProber.GetMemory</code></td></tr><tr><td>Storage Devices (HDD, SSD, NVMe, eMMC, ...)</td><td><code>HardwareProber.GetHardDisks</code></td></tr></tbody></table>
+<table><thead><tr><th width="267">Type</th><th>Property</th></tr></thead><tbody><tr><td>Processor (CPU)</td><td><code>HardwareProber.GetProcessor()</code></td></tr><tr><td>Graphics Card (GPU)</td><td><code>HardwareProber.GetVideos()</code></td></tr><tr><td>System Memory (RAM)</td><td><code>HardwareProber.GetMemory()</code></td></tr><tr><td>Storage Devices (HDD, SSD, NVMe, eMMC, ...)</td><td><code>HardwareProber.GetHardDisks()</code></td></tr></tbody></table>
 
 Once you call these properties, the parser relevant to the part that you need to get information will try to fetch info from the hardware in native ways.
+
+{% hint style="info" %}
+You can invalidate the cache using the `InvalidateCache()` function from the same class for benchmarking and other purposes.
+{% endhint %}
 
 ## Benchmark Results
 
