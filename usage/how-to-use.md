@@ -1,6 +1,6 @@
 ---
-description: How do you use this library?
 icon: computer
+description: How do you use this library?
 ---
 
 # How to use
@@ -63,6 +63,10 @@ This function queries information about your kernel and its basic information, l
 ### Platform
 
 You can also query the platform of your choice using functions defined in the `PlatformHelper` class. It allows you to check to see if the host is running Windows or Linux, and more. It also allows you to get the terminal emulator and the type. You can detect .NET Framework, too!
+
+{% hint style="info" %}
+You can also check to see if a program is running from either a GRILO bootable environment (`IsRunningFromGrilo()`) or a Nitrocid environment (`IsRunningFromNitrocid()`).
+{% endhint %}
 
 You can also use the RID graph reader by using `GetGraphFromRid()` found in the `RidGraphReader` class to get all the RIDs that can be used to resolve them to basically the base RID.
 
@@ -130,6 +134,54 @@ private static int SayHello()
 }
 ```
 
-## PCI IDs
+### Environment tools
 
-SpecProbe now manages all the PCI IDs for all known devices that you can find in the PCI ID database that you can download [here](https://pci-ids.ucw.cz/). You can use the `PciListParser` class that lets you get vendors, devices, subdevices, and get their information.
+SpecProbe also implements a class called `EnvironmentTools` that allows you to use the functions related to querying and setting environment variables for native libraries. Currently, you can get and set an environment variable with the following methods:
+
+* Using .NET (managed): This uses the [`Environment.GetEnvironmentVariable()`](https://learn.microsoft.com/en-us/dotnet/api/system.environment.getenvironmentvariable?view=net-8.0) function and the [`Environment.SetEnvironmentVariable()`](https://learn.microsoft.com/en-us/dotnet/api/system.environment.setenvironmentvariable?view=net-8.0) function, but it might not be effective for some native libraries on Windows and all native libraries on Unix.
+  * `GetEnvironmentVariableManaged()`
+  * `SetEnvironmentVariableManaged()`
+  * `SetEnvironmentVariableAppendManaged()`
+  * `SetEnvironmentVariableNoOverwriteManaged()`
+* Using UCRT: This uses the [`getenv_s()`](https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/getenv-s-wgetenv-s?view=msvc-170) function and the [`_putenv_s()`](https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/putenv-s-wputenv-s?view=msvc-170) function, and it's effective for UCRT-based native libraries built for Windows.
+  * `GetEnvironmentVariableUcrt()`
+  * `SetEnvironmentVariableUcrt()`
+  * `SetEnvironmentVariableAppendUcrt()`
+  * `SetEnvironmentVariableNoOverwriteUcrt()`
+* Using LIBC: This uses the [`getenv()`](https://man7.org/linux/man-pages/man3/getenv.3.html) function and the [`setenv()`](https://man7.org/linux/man-pages/man3/setenv.3.html) function, and it's effective for Unix native libraries.
+  * `GetEnvironmentVariableLibc()`
+  * `SetEnvironmentVariableLibc()`
+  * `SetEnvironmentVariableAppendLibc()`
+  * `SetEnvironmentVariableNoOverwriteLibc()`
+
+## Device IDs
+
+SpecProbe manages all device IDs according to the available databases. Currently, as of 3.2.0, it provides two types of such database:
+
+* PCI (Peripheral Component Interconnect) IDs
+* USB (Universal Serial Bus) IDs
+
+### PCI IDs
+
+SpecProbe now manages PCI IDs for all known devices that you can find in the PCI ID database that you can download [here](https://pci-ids.ucw.cz/). You can use the `PciListParser` class that lets you get vendors, devices, subdevices, and get their information. It also contains device class management.
+
+### USB IDs
+
+SpecProbe manages USB IDs for all known USB devices ranging from USB mass storage devices to external hard drives to mouses and keyboards. This is based on a database of known USB devices that you can download [here](http://www.linux-usb.org/usb-ids.html). You can use the `UsbListParser` class that lets you get the following:
+
+* Vendors
+  * Device
+    * Protocol
+* Classes
+  * Subclasses
+* Audio terminals
+* Video terminals
+* Human Interface Devices (HIDs)
+* HID items
+* Physical biases
+* Physical descriptors
+* HID usage pages
+  * HID usages
+* Languages
+  * Dialects
+* Country codes
