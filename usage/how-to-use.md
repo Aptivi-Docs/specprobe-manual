@@ -17,25 +17,28 @@ You can invalidate the cache using the `InvalidateCache()` function from the sam
 
 ## Benchmark Results
 
-The benchmark shows the comparison of performance of SpecProbe and Inxi.NET in their default settings.
+The benchmark shows the comparison of performance of SpecProbe and Inxi.NET in their default settings. with a dry job running the hardware probe only once.
 
-* SpecProbe: CPU, GPU, RAM, and HDD (1.0.0)
-* Inxi.NET: All supported hardware types (2022.5.0.4)
+* SpecProbe: CPU, GPU, RAM, and HDD (3.2.0)
+* Inxi.NET: CPU, GPU, RAM, and HDD (2022.5.0.4)
 
-<pre><code>BenchmarkDotNet v0.13.9+228a464e8be6c580ad9408e98f18813f6407fb5a, Windows 10 (10.0.19045.3570/22H2/2022Update)
+```
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.22631.4317/23H2/2023Update/SunValley3)
 Intel Core i7-8700 CPU 3.20GHz (Coffee Lake), 1 CPU, 12 logical and 6 physical cores
-.NET SDK 7.0.402
-  [Host]     : .NET 6.0.23 (6.0.2323.48002), X64 RyuJIT AVX2
-  DefaultJob : .NET 6.0.23 (6.0.2323.48002), X64 RyuJIT AVX2
+.NET SDK 8.0.403
+  [Host] : .NET 8.0.10 (8.0.1024.46610), X64 RyuJIT AVX2
+  Dry    : .NET 8.0.10 (8.0.1024.46610), X64 RyuJIT AVX2
 
+Job=Dry  IterationCount=1  LaunchCount=1
+RunStrategy=ColdStart  UnrollFactor=1  WarmupCount=1
 
-| Method                   | Mean                 | Error             | StdDev            |
-|------------------------- |---------------------:|------------------:|------------------:|
-<strong>| ProbeEverythingInxiNet   | 10,220,355,442.86 ns | 20,018,911.754 ns | 17,746,243.838 ns |
-</strong><strong>| ProbeEverythingSpecProbe |             14.25 ns |          0.079 ns |          0.074 ns |
-</strong></code></pre>
+| Method                   | Mean       | Error |
+|------------------------- |-----------:|------:|
+| ProbeEverythingInxiNet   | 2,356.4 ms |    NA |
+| ProbeEverythingSpecProbe |   434.1 ms |    NA |
+```
 
-Inxi.NET took `10,220,355,442.86` nanoseconds, or `10.2` seconds, to probe all the supported hardware types, while SpecProbe only took `14.25` nanoseconds for all the supported types mentioned above. This makes SpecProbe thousands of times faster than Inxi.NET.
+Inxi.NET took `2,356.4` milliseconds, or `2.3` seconds, to probe all the supported hardware types, while SpecProbe only took `434.1` milliseconds for all the supported types mentioned above. This makes SpecProbe faster than Inxi.NET.
 
 ## Parts
 
