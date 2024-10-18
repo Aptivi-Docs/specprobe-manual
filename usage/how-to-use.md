@@ -19,7 +19,7 @@ You can invalidate the cache using the `InvalidateCache()` function from the sam
 
 The benchmark shows the comparison of performance of SpecProbe and Inxi.NET in their default settings. with a dry job running the hardware probe only once.
 
-* SpecProbe: CPU, GPU, RAM, and HDD (3.2.0)
+* SpecProbe: CPU, GPU, RAM, and HDD (3.2.1)
 * Inxi.NET: CPU, GPU, RAM, and HDD (2022.5.0.4)
 
 ```
