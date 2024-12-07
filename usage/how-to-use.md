@@ -69,13 +69,40 @@ This function queries information about your kernel and its basic information, l
 
 ### Platform
 
-You can also query the platform of your choice using functions defined in the `PlatformHelper` class. It allows you to check to see if the host is running Windows or Linux, and more. It also allows you to get the terminal emulator and the type. You can detect .NET Framework, too!
+You can also query the platform of your choice using functions defined in the `PlatformHelper` class. It allows you to check to see if the host is running Windows or Linux, and more.
 
-{% hint style="info" %}
-You can also check to see if a program is running from either a GRILO bootable environment (`IsRunningFromGrilo()`) or a Nitrocid environment (`IsRunningFromNitrocid()`).
-{% endhint %}
-
-You can also use the RID graph reader by using `GetGraphFromRid()` found in the `RidGraphReader` class to get all the RIDs that can be used to resolve them to basically the base RID.
+* Platform queries
+  * `IsOnWindows()`: Checks to see if the application is running under Windows
+  * `IsOnWindowsOrWsl()`: Checks to see if the application is running under either Windows or WSL
+  * `IsOnUnix()`: Checks to see if the application is running under Linux and other Unix-based systems
+  * `IsOnMacOS()`: Checks to see if the application is running under macOS, which is a BSD-based Unix operating system
+  * `IsOnAndroid()`: Checks to see if the application is running under Android, which is a Linux-based system
+  * `IsOnArmOrArm64()`: Checks to see if the application is running under either ARM or ARM64 processor
+  * `IsOnArm()`: Checks to see if the application is running under ARM (32-bit)
+  * `IsOnArm64()`: Checks to see if the application is running under ARM64
+  * `IsOnUnixMusl()`: Checks to see if the `libc` library is a `musl` implementation or not
+  * `IsOnUnixWsl()`: Checks to see if this Linux flavor is a WSL distribution
+  * `GetPlatform()`: Gets the platform in an enumeration
+  * `GetArchitecture()`: Gets the architecture in an enumeration
+* Terminal environment queries
+  * `GetTerminalEmulator()`: Gets the terminal emulator by polling the `TERM_PROGRAM` environment variable
+  * `GetTerminalType()`: Gets the emulated terminal type by polling the `TERM` environment variable
+* Environment queries
+  * `IsRunningFromGrilo()`: Checks to see whether this program has been executed from GRILO, an obsolete program
+  * `IsRunningFromNitrocid()`: Checks to see whether this program has been executed from Nitrocid's bootloader or from Nitrocid's modding feature
+  * `IsRunningFromTmux()`: Checks to see whether this terminal is a TMUX terminal
+  * `IsRunningFromScreen()`: Checks to see whether this terminal is a GNU Screen terminal
+  * `IsRunningFromMono()`: Checks to see whether this appiication is run from Mono Runtime or not
+  * `IsDotNetFx()`: Checks to see whether this application is run from .NET Framework on Windows
+* Runtime ID queries
+  * `GetCurrentGenericRid()`: Gets the current generic RID (doesn't describe specific distribution), optionally specifying whether MUSL is included in the queries
+* GUI queries
+  * `IsOnGui()`: Checks to see whether the current environment is a GUI environment or not (always true on macOS, Windows, and Android)
+  * `IsOnX11()`: Checks to see whether the GUI framework used is either an X.Org server or an XWayland server (false on macOS, Windows, and Android)
+  * `IsOnWayland()`: Checks to see whether the GUI framework used is a Wayland server (false on macOS, Windows, and Android)
+* PATH tools
+  * `GetPaths()`: Gets a list of `PATH` directories as an array
+  * `GetPossiblePaths()`: Takes a file name and queries it by checking every single `PATH` appended with the file name for existence, then returns an array of paths that this file is found on
 
 ## Native Libraries
 
