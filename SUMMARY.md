@@ -14,6 +14,6 @@
 
 ***
 
-* [Report an issue](https://github.com/Aptivi/SpecProbe/issues/new)
-* [Source code](https://github.com/Aptivi/SpecProbe)
+* [Report an issue](https://gitlab.com/aptivi/main/SpecProbe/-/issues)
+* [Source code](https://gitlab.com/aptivi/main/SpecProbe)
 * [API Reference](https://aptivi.github.io/SpecProbe)
