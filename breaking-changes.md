@@ -5,17 +5,21 @@ icon: newspaper
 
 # Breaking changes
 
-When we're making new versions of this library, there are several breaking changes that we had to make to maintain the library better and to introduce new features and/or improvements. Here are the following breaking changes sorted from the oldest to the latest:
+When we're making new versions of this library, there are several breaking changes that we had to make to maintain the library better and to introduce new features and/or improvements.
 
-## From 1.0.0-1.5.0 to 1.6.0
+***
+
+## <mark style="color:$primary;">From 1.0.0-1.5.0 to 1.6.0</mark>
 
 The version 1.6.0 of the library has introduced the following breaking changes:
 
-### Moved namespaces
+<details>
+
+<summary>Moved namespaces</summary>
 
 {% code title="PlatformHelper.cs" lineNumbers="true" %}
 ```csharp
-namespace SpecProbe.Platform
+namespace SpecProbe.Platform { }
 ```
 {% endcode %}
 
@@ -25,23 +29,27 @@ namespace SpecProbe.Platform
 Starting from this version, you'll need to update all the libraries that refer to this platform helper to use the brand new namespace to avoid bogus loading errors.
 {% endhint %}
 
-### Moved software-related classes
+</details>
+
+<details>
+
+<summary>Moved software-related classes</summary>
 
 {% code title="RidGraphReader.cs" lineNumbers="true" %}
 ```csharp
-namespace SpecProbe.Platform
+namespace SpecProbe.Platform { }
 ```
 {% endcode %}
 
 {% code title="HardwareProber.cs" lineNumbers="true" %}
 ```csharp
-namespace SpecProbe.Hardware
+namespace SpecProbe.Hardware { }
 ```
 {% endcode %}
 
 {% code title="Hardware .cs files" lineNumbers="true" %}
 ```csharp
-namespace SpecProbe.Hardware.*
+namespace SpecProbe.Hardware.* { }
 ```
 {% endcode %}
 
@@ -51,15 +59,21 @@ We've moved the software-related classes to the appropriate `SpecProbe.Software`
 You must change all the references to point to the updated namespaces.
 {% endhint %}
 
-## From 1.6.0 to 3.0.0
+</details>
+
+***
+
+## <mark style="color:$primary;">From 1.6.0 to 3.0.0</mark>
 
 The version 3.0.0 of the library has introduced the following breaking changes:
 
-### Library manager reworked
+<details>
+
+<summary>Library manager reworked</summary>
 
 {% code title="LibraryItem.cs" lineNumbers="true" %}
 ```csharp
-public class LibraryItem
+public class LibraryItem { }
 ```
 {% endcode %}
 
@@ -67,7 +81,7 @@ In order to simplify things, we've decided to lower the requirement of managing 
 
 {% code title="LibraryManager.cs" lineNumbers="true" %}
 ```csharp
-public LibraryItem FindItem()
+public LibraryItem FindItem() { }
 ```
 {% endcode %}
 
@@ -75,7 +89,7 @@ As a result, the above function has been removed.
 
 {% code title="LibraryManager.cs" lineNumbers="true" %}
 ```csharp
-public LibraryManager(params LibraryItem[] items)
+public LibraryManager(params LibraryItem[] items) { }
 ```
 {% endcode %}
 
@@ -85,7 +99,11 @@ Also, the above constructor has been changed to take an array of `LibraryFile` c
 While it simplifies native library loading, you'll need to create conditional statements so that you can filter loading by architecture.
 {% endhint %}
 
-### Refactored parser functions
+</details>
+
+<details>
+
+<summary>Refactored parser functions</summary>
 
 We've refactored all parser functions so that they more accurately reflect the hardware type being parsed, with single-array properties actually being a single class instance to simplify things. As a result, we've renamed all the properties and changed them into functions:
 
@@ -99,3 +117,5 @@ In addition to that, each device type now store their own errors instead of grou
 {% hint style="info" %}
 In order to upgrade to 3.0.0, you must change all calls to the device info properties so that the above functions can be called instead.
 {% endhint %}
+
+</details>

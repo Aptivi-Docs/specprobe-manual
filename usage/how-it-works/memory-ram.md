@@ -5,19 +5,35 @@ icon: memory
 
 # Memory (RAM)
 
-SpecProbe can probe RAM information by calling the `HardwareProber.Memory` property. This populates the following values in accordance to the available information:
+SpecProbe can probe RAM information by calling the `HardwareProber.GetMemory()` function.
 
-| Value                  | Notes                                    |
-| ---------------------- | ---------------------------------------- |
-| `TotalMemory`          |                                          |
-| `TotalPhysicalMemory`  | Unavailable for unrooted Android devices |
-| `SystemReservedMemory` | Unavailable for unrooted Android devices |
+<details>
 
-## How parsing works
+<summary>Properties in the RAM information</summary>
+
+This populates the following values in accordance to the available information:
+
+<table><thead><tr><th width="199.9947509765625">Value</th><th>Notes</th></tr></thead><tbody><tr><td><code>TotalMemory</code></td><td></td></tr><tr><td><code>TotalPhysicalMemory</code></td><td>Unavailable for unrooted Android devices</td></tr><tr><td><code>SystemReservedMemory</code></td><td>Unavailable for unrooted Android devices</td></tr></tbody></table>
+
+</details>
+
+***
+
+## <mark style="color:$primary;">How parsing works</mark>
 
 This section describes how parsing works for the below systems:
 
-### Linux
+<details>
+
+<summary>Windows</summary>
+
+For Windows systems, it calls the native Windows API function [`GlobalMemoryStatusEx()`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex) to get the total usable installed memory. Then, it calls the [`GetPhysicallyInstalledSystemMemory()`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getphysicallyinstalledsystemmemory) function to get the physically installed system memory in kilobytes. SpecProbe then converts the value to bytes by multiplying it by `1024`.
+
+</details>
+
+<details>
+
+<summary>Linux</summary>
 
 RAM information is obtained by using the `meminfo` file from the `/proc` interface usually accessible by normal users on Linux systems. The following entries are searched for:
 
@@ -33,15 +49,19 @@ Then, SpecProbe tries to get all the memory blocks and verify that the block is 
 To get this information on Android phones and tablets, your device needs to be rooted and SpecProbe needs to be updated to version 1.1.0. Unrooted Android devices only show the total installed memory.
 {% endhint %}
 
-### Windows
+</details>
 
-For Windows systems, it calls the native Windows API function [`GlobalMemoryStatusEx()`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex) to get the total usable installed memory. Then, it calls the [`GetPhysicallyInstalledSystemMemory()`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getphysicallyinstalledsystemmemory) function to get the physically installed system memory in kilobytes. SpecProbe then converts the value to bytes by multiplying it by `1024`.
+<details>
 
-### macOS
+<summary>macOS</summary>
 
 For Macintosh systems, it executes `sysctl` with the following arguments:
 
-* `hw.memsize_usable`: Usable memory size in bytes
-* `hw.memsize`: Total memory size in bytes
+| Argument            | Description                 |
+| ------------------- | --------------------------- |
+| `hw.memsize_usable` | Usable memory size in bytes |
+| `hw.memsize`        | Total memory size in bytes  |
 
 Then, SpecProbe processes their values as appropriate.
+
+</details>

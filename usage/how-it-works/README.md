@@ -15,6 +15,10 @@ All hardware part probers implement their own ways to probe them by using platfo
 Not all properties in individual part instances are populated due to OS and processor architecture differences.
 {% endhint %}
 
+***
+
+## <mark style="color:$primary;">Explanation of individual parts</mark>
+
 For individual part explanation, select a part below:
 
 {% content-ref url="processors-cpu.md" %}
