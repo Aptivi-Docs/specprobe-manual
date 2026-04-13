@@ -55,7 +55,7 @@ This function queries information about your kernel and its basic information, l
 
 You can also query the operating system of your choice using functions defined in the `PlatformHelper` class.
 
-<table><thead><tr><th width="180.33331298828125">Function</th><th>Description</th></tr></thead><tbody><tr><td><code>IsOnWindows()</code></td><td>Checks to see if the application is running under Windows</td></tr><tr><td><code>IsOnWindowsOrWsl()</code></td><td>Checks to see if the application is running under either Windows or WSL</td></tr><tr><td><code>IsOnUnix()</code></td><td>Checks to see if the application is running under Linux and other Unix-based systems</td></tr><tr><td><code>IsOnMacOS()</code></td><td>Checks to see if the application is running under macOS, which is a BSD-based Unix operating system</td></tr><tr><td><code>IsOnAndroid()</code></td><td>Checks to see if the application is running under Android, which is a Linux-based system</td></tr><tr><td><code>GetPlatform()</code></td><td>Gets the platform in an enumeration</td></tr></tbody></table>
+<table><thead><tr><th width="180.33331298828125">Function</th><th>Description</th></tr></thead><tbody><tr><td><code>IsOnWindows()</code></td><td>Checks to see if the application is running under Windows</td></tr><tr><td><code>IsOnWindowsOrWsl()</code></td><td>Checks to see if the application is running under either Windows or WSL</td></tr><tr><td><code>IsOnUnix()</code></td><td>Checks to see if the application is running under Linux and other Unix-based systems</td></tr><tr><td><code>IsOnFreeBSD()</code></td><td>Checks to see if the application is running under FreeBSD</td></tr><tr><td><code>IsOnMacOS()</code></td><td>Checks to see if the application is running under macOS, which is a BSD-based Unix operating system</td></tr><tr><td><code>IsOnAndroid()</code></td><td>Checks to see if the application is running under Android, which is a Linux-based system</td></tr><tr><td><code>GetPlatform()</code></td><td>Gets the platform in an enumeration</td></tr></tbody></table>
 
 </details>
 
@@ -115,7 +115,7 @@ You can also query the graphical environment type of your choice using functions
 
 You can also query PATH directories using functions defined in the `PlatformHelper` class.
 
-<table><thead><tr><th width="179.6666259765625">Function</th><th>Description</th></tr></thead><tbody><tr><td><code>GetPaths()</code></td><td>Gets a list of <code>PATH</code> directories as an array</td></tr><tr><td><code>GetPossiblePaths()</code></td><td>Takes a file name and queries it by checking every single <code>PATH</code> appended with the file name for existence, then returns an array of paths that this file is found on</td></tr></tbody></table>
+<table><thead><tr><th width="184.99993896484375">Function</th><th>Description</th></tr></thead><tbody><tr><td><code>GetPaths()</code></td><td>Gets a list of <code>PATH</code> directories as an array</td></tr><tr><td><code>GetPossiblePaths()</code></td><td>Takes a file name and queries it by checking every single <code>PATH</code> appended with the file name for existence, then returns an array of paths that this file is found on</td></tr></tbody></table>
 
 </details>
 
@@ -183,6 +183,10 @@ Once you're done creating new instances of library manager classes, you can now 
 To verify that it's truly loaded, use the `GetNativeMethodDelegate<T>()` method, pointing the generic type argument to your function delegate that matches the native library signatures.
 {% endstep %}
 {% endstepper %}
+
+{% hint style="info" %}
+For FreeBSD compatibility, you'll have to install `SpecProbe.Native` alongside `SpecProbe.Loader`. This is a limitation resulting from the initial support for FreeBSD and 3.9.0 will introduce a breaking change that will resolve it.
+{% endhint %}
 
 Here are some of the examples of how to load such libraries:
 

@@ -17,7 +17,7 @@ This populates the following values in accordance to the available information:
 
 Each partition in the `Partitions` list contains the following properties:
 
-<table><thead><tr><th width="179.9947509765625">Value</th><th>Notes</th></tr></thead><tbody><tr><td><code>PartitionNumber</code></td><td></td></tr><tr><td><code>PartitionSize</code></td><td></td></tr><tr><td><code>PartitionType</code></td><td></td></tr><tr><td><code>PartitionBootable</code></td><td>Always <code>false</code> on macOS, and only <code>true</code> on Linux if it's an ESP.</td></tr><tr><td><code>PartitionOffset</code></td><td></td></tr></tbody></table>
+<table><thead><tr><th width="179.9947509765625">Value</th><th>Notes</th></tr></thead><tbody><tr><td><code>PartitionNumber</code></td><td></td></tr><tr><td><code>PartitionSize</code></td><td></td></tr><tr><td><code>PartitionType</code></td><td></td></tr><tr><td><code>PartitionBootable</code></td><td>Always <code>false</code> on macOS and FreeBSD, and only <code>true</code> on Linux if it's an ESP.</td></tr><tr><td><code>PartitionOffset</code></td><td></td></tr></tbody></table>
 
 </details>
 
@@ -95,5 +95,19 @@ SpecProbe on macOS performs the following steps:
 4. For the partitions, SpecProbe gets the disk ID and the partition number, and checks to see if the disk is one of the known virtual disks.
 5. Then, SpecProbe adds the disk or partition to the list.
 6. Finally, SpecProbe tries to figure out how to parse the partition table and the partition type.
+
+</details>
+
+<details>
+
+<summary>FreeBSD</summary>
+
+SpecProbe in FreeBSD performs the following steps:
+
+1. SpecProbe tries to get all block devices defined in the `/dev` folder, whose names start with either `ada` (IDE), `da` (SCSI), or `nda` (NVMe), excluding partitions (`p0` or `s0`, ...).
+2. `sysctl` gets called to determine whether the block device that is enumerated is removable or not using the flags defined in the `kern.cam.<block>.<num>.flags` variable.
+3. If not removable, `gpart list` is called on the device block name to get disk and partitions info. For example, `gpart list nda0` is called for the first NVMe disk.
+4. SpecProbe then traverses the output of the above command to get info, such as the disk size (`Mediasize`), offset (`offset`), and the partition type (`rawtype`).
+5. After that, SpecProbe adds the partition to the appropriate disk, which is then added to the disks dictionary as the traversal for the disk finishes.
 
 </details>

@@ -69,8 +69,16 @@ If SpecProbe is told that your application is hardened, SpecProbe uses the CoreG
 
 #### <mark style="color:$primary;">Not Hardened</mark>
 
-If SpecProbe is told that your application is not hardened, SpecProbe uses the `system_profile` application to get information about the display. It gets the `Device ID` and the `Vendor ID`.
+If SpecProbe is told that your application is not hardened, SpecProbe uses the `system_profiler` application to get information about the display. It gets the `Device ID` and the `Vendor ID`.
 
 Finally, SpecProbe merges these two IDs to create a single video card name.
+
+</details>
+
+<details>
+
+<summary>FreeBSD</summary>
+
+See the Linux section for more info.
 
 </details>

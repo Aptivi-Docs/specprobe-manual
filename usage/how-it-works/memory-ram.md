@@ -65,3 +65,18 @@ For Macintosh systems, it executes `sysctl` with the following arguments:
 Then, SpecProbe processes their values as appropriate.
 
 </details>
+
+<details>
+
+<summary>FreeBSD</summary>
+
+For FreeBSD systems, it executes `sysctl` with the following arguments:
+
+| Argument     | Description                 |
+| ------------ | --------------------------- |
+| `hw.physmem` | Usable memory size in bytes |
+| `hw.realmem` | Total memory size in bytes  |
+
+Then, SpecProbe processes their values as appropriate.
+
+</details>
