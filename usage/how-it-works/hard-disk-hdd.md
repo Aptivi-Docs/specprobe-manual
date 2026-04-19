@@ -13,7 +13,7 @@ SpecProbe can probe HDD information by calling the `HardwareProber.GetHardDisks(
 
 This populates the following values in accordance to the available information:
 
-<table><thead><tr><th width="189.9947509765625">Value</th><th>Notes</th></tr></thead><tbody><tr><td><code>HardDiskSize</code></td><td></td></tr><tr><td><code>PartitionCount</code></td><td></td></tr><tr><td><code>Partitions</code></td><td></td></tr><tr><td><code>PartitionTableType</code></td><td></td></tr></tbody></table>
+<table><thead><tr><th width="189.9947509765625">Value</th><th>Notes</th></tr></thead><tbody><tr><td><code>HardDiskSize</code></td><td></td></tr><tr><td><code>PartitionCount</code></td><td></td></tr><tr><td><code>Partitions</code></td><td></td></tr><tr><td><code>PartitionTableType</code></td><td></td></tr><tr><td><code>Removable</code></td><td></td></tr></tbody></table>
 
 Each partition in the `Partitions` list contains the following properties:
 
@@ -68,8 +68,8 @@ To do this in your application, create an `app.manifest` file and add this insid
 SpecProbe on Linux performs the following steps:
 
 1. It tries to get all the block devices defined in the `/sys/block` folder.
-2. Once the list of block devices are populated (loop devices are not supported), it first checks the contents of the `removable` file.
-3. If the `removable` state is zero, which means that it's a fixed drive, SpecProbe attempts to get the total size of the drive by probing the block size of each drive from the `size` file for each drive.
+2. Once the list of block devices are populated (loop devices are not supported), it first checks the contents of the `removable` file, and sets the removable flag as appropriate.
+3. SpecProbe attempts to get the total size of the drive by probing the block size of each drive from the `size` file for each drive.
 4. Then, it translates that size to the actual size in bytes by multiplying it by `512`. It then tries to figure out the partition table type.
 5. For the partitions, SpecProbe gets the device name and attempts to check the block device name to see if it ends with a number (`nvme0n1` for NVMe drives, `mmbclk0` for eMMC drives, ...).
 6. After that, it assigns the drive number as appropriate.
@@ -91,10 +91,11 @@ SpecProbe on macOS performs the following steps:
 
 1. SpecProbe on macOS systems tries to get all the block devices defined in the `/dev` folder that their names start with `disk`.
 2. `diskutil` then gets executed with the full path to the block device, such as `/dev/disk0` for the first disk and `/dev/disk0s1` for the first partition.
-3. If the `Removable Media` state is `Fixed`, which means that it's a fixed drive, SpecProbe attempts to get the total size of the drive by getting the total number of bytes from the `Disk Size` for physical disks or the `Volume Used Space` for APFS virtual partitions.
-4. For the partitions, SpecProbe gets the disk ID and the partition number, and checks to see if the disk is one of the known virtual disks.
-5. Then, SpecProbe adds the disk or partition to the list.
-6. Finally, SpecProbe tries to figure out how to parse the partition table and the partition type.
+3. SpecProbe checks the `Removable Media` state (`Fixed` or `Removable`) and sets the flag as appropriate.
+4. SpecProbe attempts to get the total size of the drive by getting the total number of bytes from the `Disk Size` for physical disks or the `Volume Used Space` for APFS virtual partitions.
+5. For the partitions, SpecProbe gets the disk ID and the partition number, and checks to see if the disk is one of the known virtual disks.
+6. Then, SpecProbe adds the disk or partition to the list.
+7. Finally, SpecProbe tries to figure out how to parse the partition table and the partition type.
 
 </details>
 
@@ -105,8 +106,8 @@ SpecProbe on macOS performs the following steps:
 SpecProbe in FreeBSD performs the following steps:
 
 1. SpecProbe tries to get all block devices defined in the `/dev` folder, whose names start with either `ada` (IDE), `da` (SCSI), or `nda` (NVMe), excluding partitions (`p0` or `s0`, ...).
-2. `sysctl` gets called to determine whether the block device that is enumerated is removable or not using the flags defined in the `kern.cam.<block>.<num>.flags` variable.
-3. If not removable, `gpart list` is called on the device block name to get disk and partitions info. For example, `gpart list nda0` is called for the first NVMe disk.
+2. `sysctl` gets called to determine whether the block device that is enumerated is removable or not using the flags defined in the `kern.cam.<block>.<num>.flags` variable, and the appropriate flag is set.
+3. `gpart list` is called on the device block name to get disk and partitions info. For example, `gpart list nda0` is called for the first NVMe disk.
 4. SpecProbe then traverses the output of the above command to get info, such as the disk size (`Mediasize`), offset (`offset`), and the partition type (`rawtype`).
 5. After that, SpecProbe adds the partition to the appropriate disk, which is then added to the disks dictionary as the traversal for the disk finishes.
 

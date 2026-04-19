@@ -18,9 +18,9 @@ This populates the following values in accordance to the available information:
 | `ProcessorCores`        |                                                                                                                                                             |
 | `CoresForEachCore`      | Always 1 on ARM systems                                                                                                                                     |
 | `TotalCores`            |                                                                                                                                                             |
-| `L1CacheSize`           | <p>Unavailable on ARM systems<br><br>Unavailable on FreeBSD systems</p>                                                                                     |
-| `L2CacheSize`           | <p>Unavailable on ARM systems<br><br>Unavailable on FreeBSD systems</p>                                                                                     |
-| `L3CacheSize`           | <p>Unavailable on ARM systems<br><br>Unavailable on FreeBSD systems<br><br>Unavailable on macOS</p>                                                         |
+| `L1CacheSize`           | Unavailable on ARM systems                                                                                                                                  |
+| `L2CacheSize`           | Unavailable on ARM systems                                                                                                                                  |
+| `L3CacheSize`           | Unavailable on ARM systems                                                                                                                                  |
 | `Name`                  | A list of part names on ARM systems                                                                                                                         |
 | `CpuidVendor`           | <p>Can sometimes be empty on some systems.<br><br>Unavailable on ARM systems</p>                                                                            |
 | `Vendor`                | A list of implementers on ARM systems                                                                                                                       |
@@ -104,10 +104,8 @@ SpecProbe executes the `sysctl` command with the following arguments:
 | `hw.cpufrequency`               | The frequency of the CPU in hertz (Hz)                  |
 | `machdep.cpu.vendor`            | The processor vendor (GenuineIntel, AuthenticAMD, etc.) |
 | `machdep.cpu.brand_string`      | The processor brand string                              |
-| `hw.l1icachesize`               | L1 cache size in bytes                                  |
-| `hw.l2cachesize`                | L2 cache size in bytes                                  |
 
-Then, SpecProbe probes these values and processes them as appropriate. Finally, if SpecProbe is not run from ARM processor, it queries the feature list using the CPUID instruction to get all features by parsing the integer as a sequence of bits by reading bit by bit.
+Then, SpecProbe probes these values and processes them as appropriate. For L1, L2, and L3 caches, CPUID is used. Finally, if SpecProbe is not run from ARM processor, it queries the feature list using the CPUID instruction to get all features by parsing the integer as a sequence of bits by reading bit by bit.
 
 </details>
 
@@ -127,7 +125,7 @@ SpecProbe executes the `sysctl` command with the following arguments:
 | `machdep.cpu.vendor`        | The processor vendor (GenuineIntel, AuthenticAMD, etc.) |
 | `hw.model`                  | The processor brand string                              |
 
-Then, SpecProbe probes these values and processes them as appropriate. Finally, if SpecProbe is not run from ARM processor, it queries the feature list using the CPUID instruction to get all features by parsing the integer as a sequence of bits by reading bit by bit.
+Then, SpecProbe probes these values and processes them as appropriate. For L1, L2, and L3 caches, CPUID is used. Finally, if SpecProbe is not run from ARM processor, it queries the feature list using the CPUID instruction to get all features by parsing the integer as a sequence of bits by reading bit by bit.
 
 </details>
 

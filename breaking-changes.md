@@ -119,3 +119,36 @@ In order to upgrade to 3.0.0, you must change all calls to the device info prope
 {% endhint %}
 
 </details>
+
+***
+
+## <mark style="color:$primary;">From 3.0.0 to 3.9.0</mark>
+
+The version 3.9.0 of the library has introduced the following breaking changes:
+
+<details>
+
+<summary>Merged <code>SpecProbe.Loader</code> and <code>SpecProbe.Native</code></summary>
+
+We've successfully merged `SpecProbe.Native` and `SpecProbe.Loader` to the latter library as part of our effort into making support for FreeBSD effortless.
+
+{% hint style="info" %}
+To continue using SpecProbe, you'll have to uninstall `SpecProbe.Native` and install `SpecProbe.Loader`, if the former library was installed explicitly. If `SpecProbe.Native` wasn't specified in your project file, you don't need to do anything.
+{% endhint %}
+
+</details>
+
+<details>
+
+<summary>Relocated PCI and USB info parsers</summary>
+
+We have relocated the PCI and the USB hardware information parsers so that they are relocated in a namespace that groups them, with the addition of the ISA info parser.
+
+{% hint style="info" %}
+You'll have to update your using clause to point to:
+
+* `SpecProbe.Pci` -> `SpecProbe.DeviceInfo.Pci`
+* `SpecProbe.Usb` -> `SpecProbe.DeviceInfo.Usb`
+{% endhint %}
+
+</details>

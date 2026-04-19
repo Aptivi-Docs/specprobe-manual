@@ -45,6 +45,26 @@ This results in SpecProbe being faster than Inxi.NET.
 Below is the release history of the library:
 
 {% updates format="full" %}
+{% update date="2026-04-19" %}
+## <mark style="color:$primary;">v3.9.0</mark>
+
+<mark style="color:green;">Added removable hard drive support</mark>
+
+<mark style="color:green;">Added error messages for loading libraries</mark>
+
+<mark style="color:green;">Added L1, L2, and L3 support for FreeBSD and macOS (x64)</mark>
+
+<mark style="color:green;">Added new ARM implementers</mark>
+
+<mark style="color:green;">Added more PCI IDs</mark>
+
+<mark style="color:yellow;">Merged SpecProbe.Native and SpecProbe.Loader to one library</mark>
+
+<mark style="color:yellow;">Restructured parts of code</mark>
+
+<mark style="color:yellow;">General improvements and bug fixes</mark>
+{% endupdate %}
+
 {% update date="2026-04-13" %}
 ## <mark style="color:$primary;">v3.8.1</mark>
 
