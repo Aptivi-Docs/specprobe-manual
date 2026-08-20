@@ -180,13 +180,9 @@ Once you're done creating new instances of library manager classes, you can now 
 {% step %}
 ### <mark style="color:$primary;">Verify that native libraries are loaded</mark>
 
-To verify that it's truly loaded, use the `GetNativeMethodDelegate<T>()` method, pointing the generic type argument to your function delegate that matches the native library signatures.
+To verify that it's truly loaded, check `GetLibraryHandle()` and use the `GetNativeMethodDelegate<T>()` method, pointing the generic type argument to your function delegate that matches the native library signatures.
 {% endstep %}
 {% endstepper %}
-
-{% hint style="info" %}
-For FreeBSD compatibility, you'll have to install `SpecProbe.Native` alongside `SpecProbe.Loader`. This is a limitation resulting from the initial support for FreeBSD and 3.9.0 will introduce a breaking change that will resolve it.
-{% endhint %}
 
 Here are some of the examples of how to load such libraries:
 
@@ -294,5 +290,49 @@ Using LIBC: This uses the [`getenv()`](https://man7.org/linux/man-pages/man3/get
 * `SetEnvironmentVariableLibc()`
 * `SetEnvironmentVariableAppendLibc()`
 * `SetEnvironmentVariableNoOverwriteLibc()`
+
+</details>
+
+### <mark style="color:$primary;">Advanced options</mark>
+
+If you want to use a native library in a way that is not officially supported by SpecProbe, or if you know what you're doing with the method addresses, you can use the following functions on the library manager:
+
+<details>
+
+<summary>Getting library files</summary>
+
+You can use the `LibraryFiles` property from the `LibraryManager` class instance that you've created to get individual library files.
+
+</details>
+
+<details>
+
+<summary>Getting native library handle</summary>
+
+Native library handles are addresses that point to the start of the native library. They can be used to get method addresses and to manipulate with the native library once it's loaded.
+
+#### <mark style="color:$primary;">From all library files</mark>
+
+You can use the `GetLibraryHandle()` function from the `LibraryManager` class instance that you've created when loading native libraries. It will return the library handle from the first library file that was loaded.
+
+#### <mark style="color:$primary;">From a library file</mark>
+
+You can use the `NativeHandle` property from the `LibraryFile` class instance that points to the target library file.
+
+</details>
+
+<details>
+
+<summary>Getting native method address</summary>
+
+Native method addresses are entry points for a function in the native library. They point to the start of the function, and can be used to make delegates to the managed version of the functions in the managed world.
+
+#### <mark style="color:$primary;">From all library files</mark>
+
+You can use the `GetNativeMethodAddress()` function from the `LibraryManager` class instance that you've created when loading native libraries. It will return the native method address from the first library file that was loaded.
+
+#### <mark style="color:$primary;">From a library file</mark>
+
+You can use the `NativeMethodExists()` function from the `LibraryFile` class instance that points to the target library file and extract the output pointer value if the function returns `true`.
 
 </details>
