@@ -45,6 +45,12 @@ This results in SpecProbe being faster than Inxi.NET.
 Below is the release history of the library:
 
 {% updates format="full" %}
+{% update date="2026-08-27" %}
+## <mark style="color:$primary;">v3.9.1.1</mark>
+
+<mark style="color:yellow;">Fixed native library copy for .NET Framework 4.8</mark>
+{% endupdate %}
+
 {% update date="2026-08-20" %}
 ## <mark style="color:$primary;">v3.9.1</mark>
 
